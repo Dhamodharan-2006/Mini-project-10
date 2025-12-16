@@ -1,104 +1,56 @@
-import React, { useState, useEffect } from "react";
-import {
-  Container,
-  Row,
-  Col,
-  Form,
-  Button,
-  ListGroup,
-  ListGroupItem,
-} from "react-bootstrap";
+import React, { useState } from "react";
+import Axios from "axios";
+import { Container, Modal, Button } from "react-bootstrap";
+import WeatherComponent from "./components/WeatherComponent";
+import CityComponent from "./components/CityComponent";
+import { WeatherIcons } from "./components/WeatherIcons";
 
 function App() {
-  const [tasks, setTasks] = useState(() => {
-    const savedTasks = localStorage.getItem("tasks");
-    return savedTasks ? JSON.parse(savedTasks) : [];
-  });
+  const [city, updateCity] = useState();
+  const [weather, updateWeather] = useState();
+  const [error, setError] = useState("");
+  const fetchWeather = async (e) => {
+    e.preventDefault();
+    const APIKEY = "f112d2a6dc4748adad8c4d73455aba99";
 
-  const [newTask, setNewTask] = useState("");
+    try {
+      const response = await Axios.get(
+        `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${APIKEY}&units=metric`
+      );
+      updateWeather(response.data);
 
-  useEffect(() => {
-    localStorage.setItem("tasks", JSON.stringify(tasks));
-  }, [tasks]);
-
-  const addTask = () => {
-    if (newTask.trim() === "") return;
-    setTasks([...tasks, { text: newTask, completed: false }]);
-    setNewTask("");
-  };
-
-  const toggleTask = (index) => {
-    const newTasks = [...tasks];
-    newTasks[index].completed = !newTasks[index].completed;
-    setTasks(newTasks);
-  };
-
-  const deleteTask = (index) => {
-    const newTasks = tasks.filter((_, i) => i != index);
-    setTasks(newTasks);
+      setError("");
+    } catch (err) {
+      setError(
+        "Error fetching the weather data please provide a current city name"
+      );
+    }
   };
 
   return (
-    <>
-      <Container>
-        <Row className="justify-content-md-center">
-          <Col md="6">
-            <h1 className="text-center">Todo List by GUVI</h1>
-            <Form
-              onSubmit={(e) => {
-                e.preventDefault();
-                addTask();
-              }}
-            >
-              <Form.Group controlId="formNewTask">
-                <Form.Control
-                  type="text"
-                  placeholder="Enter a new Task"
-                  value={newTask}
-                  onChange={(e) => setNewTask(e.target.value)}
-                />
-              </Form.Group>
-              <Button variant="success" type="submit" className="w-100 mt-3">
-                Add new Task
-              </Button>
-            </Form>
-            <ListGroup className="mt-4">
-              {tasks.map((task, index) => (
-                <ListGroupItem
-                  key={index}
-                  className="d-flex justify-content-between align-items-center"
-                >
-                  <span
-                    style={{
-                      textDecoration: task.completed ? "line-through" : "none",
-                    }}
-                  >
-                    {task.text}
-                  </span>
-                  <div>
-                    <Button
-                      variant={task.completed ? "secondary" : "success"}
-                      size="sm"
-                      onClick={() => toggleTask(index)}
-                      className="m-1"
-                    >
-                      {task.completed ? "Undo" : "Complete"}
-                    </Button>
-                    <Button
-                      variant="danger"
-                      size="sm"
-                      onClick={() => deleteTask(index)}
-                    >
-                      Delete
-                    </Button>
-                  </div>
-                </ListGroupItem>
-              ))}
-            </ListGroup>
-          </Col>
-        </Row>
-      </Container>
-    </>
+    <Container className="mt-5">
+      <h3 className="text-center ">Guvi Weather App</h3>
+      {city && weather ? (
+        <WeatherComponent weather={weather} city={city} />
+      ) : (
+        <CityComponent updateCity={updateCity} fetchWeather={fetchWeather} />
+      )}
+
+      {error && (
+        <Modal show={true} onHide={() => setError("")}>
+          <Modal.Header closeButton>
+            <Modal.Title>Error</Modal.Title>
+          </Modal.Header>
+          <Modal.Body>{error}</Modal.Body>
+          <Modal.Footer>
+            <Button variant="danger" onClick={() => setError("")}>
+              Close
+            </Button>
+          </Modal.Footer>
+        </Modal>
+      )}
+    </Container>
   );
 }
+
 export default App;

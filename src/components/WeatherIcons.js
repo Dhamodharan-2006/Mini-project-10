@@ -1,0 +1,16 @@
+export const WeatherIcons={
+    "01d":"../icons/day.svg",
+    "01n":"../icons/night.svg",
+    "02d":"../icons/weather.svg",
+    "02n":"../icons/cloudy-night.svg",
+    "03d":"../icons/cloudy.svg",
+    "03n":"../icons/cloudy.svg",
+    "04d":"../icons/day.svg",
+    "04n":"../icons/cloudy-night.svg",
+    "09d":"../icons/rain.svg",
+    "09n":"../icons/strong-rain.svg",
+    "10d":"../icons/rain.svg",
+    "10n":"../icons/strong-rain.svg",
+    "11d":"../icons/storm.svg",
+    "11n":"../icons/storm.svg",
+};
