@@ -3,12 +3,11 @@ import Axios from "axios";
 import { Container, Modal, Button } from "react-bootstrap";
 import WeatherComponent from "./components/WeatherComponent";
 import CityComponent from "./components/CityComponent";
-import { WeatherIcons } from "./components/WeatherIcons";
 
 function App() {
   const [city, updateCity] = useState();
   const [weather, updateWeather] = useState();
-  const [error, setError] = useState("");
+  const [error, setError] = useState();
   const fetchWeather = async (e) => {
     e.preventDefault();
     const APIKEY = "f112d2a6dc4748adad8c4d73455aba99";
@@ -28,7 +27,9 @@ function App() {
   };
 
   return (
+    
     <Container className="mt-5">
+      
       <h3 className="text-center ">Guvi Weather App</h3>
       {city && weather ? (
         <WeatherComponent weather={weather} city={city} />
