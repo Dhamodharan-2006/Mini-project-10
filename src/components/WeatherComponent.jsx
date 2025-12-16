@@ -6,6 +6,7 @@ import Wind from "../icons/wind.svg";
 import Pressure from "../icons/pressure.svg";
 import { Row, Image, Col, Card, Container } from "react-bootstrap";
 import { WeatherIcons } from "./WeatherIcons";
+import {Link} from 'react-router-dom'
 
 export const WeatherInfoIcons = {
   sunset: Day,
@@ -95,7 +96,7 @@ function WeatherComponent(props) {
         </Row>
       </Container>
       <h4>
-        <a href="/">Go Back</a>
+        <Link href="/">Go Back</Link>
       </h4>
     </div>
   );
